@@ -6,6 +6,7 @@ import { HiOutlineLogout } from "react-icons/hi";
 import InputEmoji from "react-input-emoji";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Header from "./Header";
 
 const ChatPage = () => {
   const [show, setShow] = useState(false);
@@ -54,25 +55,10 @@ const ChatPage = () => {
       });
   }, []);
 
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    axios
-      .post("http://192.168.29.54:4001/auth/user-logout")
-      .then((response) => {
-        console.log(response.data);
-        localStorage.removeItem("token");
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  console.log(profile);
   return (
-    <div className="w-full h-screen bg-slate-900 p-20 flex justify-center font-poppins">
-      <div className="w-[600px] h-full flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
+    <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins">
+      <Header profile={profile} />
+      <div className="mt-28 w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
         <div className="w-full h-20 bg-green-700 flex items-center px-5">
           <div
             onClick={() => setShow(true)}
@@ -163,17 +149,7 @@ const ChatPage = () => {
           <div
             ref={ref}
             className="absolute top-12 right-8 w-40 h-auto p-2 pt-5 bg-slate-50 rounded drop-shadow-lg"
-          >
-            <button
-              onClick={handleLogout}
-              className="w-full h-8 text-red-500 border-2 border-red-300 rounded-md hover:bg-red-400 hover:text-slate-50 flex items-center justify-center gap-3"
-            >
-              <span className="-ml-2 text-xl">
-                <HiOutlineLogout />
-              </span>
-              Logout
-            </button>
-          </div>
+          ></div>
         )}
       </div>
     </div>
