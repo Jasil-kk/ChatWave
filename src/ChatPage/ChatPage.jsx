@@ -7,6 +7,7 @@ import InputEmoji from "react-input-emoji";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
+import ChatersList from "./ChatersList";
 
 const ChatPage = () => {
   const [show, setShow] = useState(false);
@@ -58,11 +59,13 @@ const ChatPage = () => {
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins">
       <Header profile={profile} />
-      <div className="mt-28 w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
+      <div className="mt-16 p-5 flex items-center gap-7">
+        <ChatersList/>
+      <div className="w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
         <div className="w-full h-20 bg-green-700 flex items-center px-5">
           <div
             onClick={() => setShow(true)}
-            className="w-12 h-12 rounded-full bg-slate-300 text-slate-500 cursor-pointer overflow-hidden"
+            className="w-12 h-12 rounded-full border-2 border-slate-400 bg-slate-300 text-slate-500 cursor-pointer overflow-hidden"
           >
             {profile?.photos[0] ? (
               <img
@@ -151,6 +154,7 @@ const ChatPage = () => {
             className="absolute top-12 right-8 w-40 h-auto p-2 pt-5 bg-slate-50 rounded drop-shadow-lg"
           ></div>
         )}
+      </div>
       </div>
     </div>
   );

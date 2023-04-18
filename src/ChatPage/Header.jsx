@@ -71,7 +71,7 @@ const Header = ({profile}) => {
           {show && (
           <div
             ref={ref}
-            className="absolute top-16 left-28 w-96 h-auto p-5 flex items-center gap-5 bg-slate-50 rounded-xl"
+            className="absolute top-16 left-28 w-96 h-auto p-5 flex items-center gap-5 drop-shadow-xl bg-slate-200 rounded-xl"
           >
             <div className="bg-slate-50 w-36 h-36 rounded-full border-4 border-slate-300 overflow-hidden">
               {profile?.photos[0] ? (
