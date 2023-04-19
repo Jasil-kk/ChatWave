@@ -47,7 +47,7 @@ const ChatPage = () => {
   };
   useEffect(() => {
     axios
-      .get("http://192.168.29.54:4001/user/get", config)
+      .get("http://192.168.43.209:4001/user/get", config)
       .then((response) => {
         setProfile(response.data);
       })
