@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { CiMenuKebab } from "react-icons/ci";
 import { HiOutlineLogout } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Profile from "../Components/Profile";
@@ -60,15 +59,14 @@ const Header = ({ profile }) => {
           />
         )}
       </div>
-      {open &&
-        <Profile open={open} setOpen={setOpen} profile={profile}/>}
+      {open && <Profile open={open} setOpen={setOpen} profile={profile} />}
       {menuShow && (
         <div
           ref={ref}
           className="absolute top-12 right-8 w-40 h-auto flex flex-col gap-2 p-2 pt-5 bg-slate-50 rounded drop-shadow-lg"
         >
-              <button
-           onClick={handleOpen}
+          <button
+            onClick={handleOpen}
             className="w-full h-8 text-slate-500 border-2 border-slate-200 rounded-md hover:bg-slate-400 hover:text-slate-50 flex items-center justify-center gap-3"
           >
             My Profile

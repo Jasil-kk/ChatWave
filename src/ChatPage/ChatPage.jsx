@@ -1,10 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
-import { TiUser } from "react-icons/ti";
 import { MdSend } from "react-icons/md";
-import { HiOutlineLogout } from "react-icons/hi";
 import InputEmoji from "react-input-emoji";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "./Header";
 import ChatersList from "./ChatersList";
