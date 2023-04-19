@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import icon from "../assets/icon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [input, setInput] = useState("");
@@ -10,7 +12,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://192.168.29.54:4001/user/signup", input)
+      .post("http://192.168.43.209:4001/user/signup", input)
       .then((response) => {
         console.log(response.data);
         navigate("/");
@@ -19,8 +21,6 @@ const Register = () => {
         console.log(error);
       });
   };
-
-  console.log(input);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
