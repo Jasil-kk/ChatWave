@@ -3,6 +3,7 @@ import icon from "../assets/icon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
+import { BaseUrl } from "../Store";
 
 const Login = () => {
   const [input, setInput] = useState("");
@@ -12,7 +13,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://192.168.43.209:4001/auth/user-signin", input)
+      .post(`${BaseUrl}/auth/user-signin`, input)
       .then((response) => {
         console.log(response.data);
         localStorage.setItem("token", response?.data?.tokenRole?.token);

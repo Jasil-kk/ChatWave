@@ -5,6 +5,7 @@ import InputEmoji from "react-input-emoji";
 import axios from "axios";
 import Header from "./Header";
 import ChatersList from "./ChatersList";
+import { BaseUrl } from "../Store";
 
 const ChatPage = () => {
   const [show, setShow] = useState(false);
@@ -44,7 +45,7 @@ const ChatPage = () => {
   };
   useEffect(() => {
     axios
-      .get("http://192.168.43.209:4001/user/get", config)
+      .get(`${BaseUrl}/user/get`, config)
       .then((response) => {
         setProfile(response.data);
       })
@@ -52,6 +53,7 @@ const ChatPage = () => {
         console.log(error);
       });
   }, []);
+  console.log(profile);
 
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins">

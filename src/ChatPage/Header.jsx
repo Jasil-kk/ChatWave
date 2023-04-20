@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { HiOutlineLogout } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import Profile from "../Components/Profile";
+import { BaseUrl } from "../Store";
 
 const Header = ({ profile }) => {
   const [open, setOpen] = useState(false);
@@ -25,7 +26,7 @@ const Header = ({ profile }) => {
 
   const handleLogout = () => {
     axios
-      .post("http://192.168.43.209:4001/auth/user-logout")
+      .post(`${BaseUrl}/auth/user-logout`)
       .then((response) => {
         console.log(response.data);
         localStorage.removeItem("token");
