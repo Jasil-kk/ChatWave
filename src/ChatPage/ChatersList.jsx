@@ -2,8 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BaseUrl } from "../Store";
+import GroupChatCrate from "../Components/GroupChatCrate";
 
 const ChatersList = () => {
+  const [open, setOpen] = useState(false);
   const [chaters, setChaters] = useState();
   const token = localStorage.getItem("token");
   const config = {
@@ -21,15 +23,17 @@ const ChatersList = () => {
       });
   }, []);
 
-  console.log(chaters);
+
+  const handleOpen = () => setOpen(true);
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
-      <button className="ml-auto mb-5 w-auto h-10 px-5 bg-green-600 hover:bg-green-700 text-slate-50 rounded-lg flex items-center">
+      <button onClick={handleOpen} className="ml-auto mb-5 w-auto h-10 px-5 bg-green-600 hover:bg-green-700 text-slate-50 rounded-lg flex items-center">
         New Chat{" "}
         <span className="text-slate-50 text-xl ml-2">
           <FiPlus />
         </span>
       </button>
+      {open && <GroupChatCrate  open={open} setOpen={setOpen}/>}
       {chaters ? (
         <>
           <ul className="max-w-md divide-y divide-gray-300 dark:divide-gray-700">
