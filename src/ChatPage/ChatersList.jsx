@@ -2,11 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BaseUrl } from "../Store";
-import GroupChatCrate from "../Components/GroupChatCrate";
+import GroupChatCreate from "../Components/GroupChatCreate";
 
 const ChatersList = () => {
   const [open, setOpen] = useState(false);
-  const [chaters, setChaters] = useState();
+  const [chaters, setChaters] = useState([]);
   const token = localStorage.getItem("token");
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -23,18 +23,18 @@ const ChatersList = () => {
       });
   }, []);
 
-
+console.log(chaters);
   const handleOpen = () => setOpen(true);
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
-      <button onClick={handleOpen} className="ml-auto mb-5 w-auto h-10 px-5 bg-green-600 hover:bg-green-700 text-slate-50 rounded-lg flex items-center">
+      <button onClick={handleOpen} className="ml-auto mb-5 w-auto h-10 px-5 bg-green-500 hover:bg-green-700 text-slate-50 rounded-lg flex items-center transform transition-all duration-1000 ease-in-out">
         New Chat{" "}
         <span className="text-slate-50 text-xl ml-2">
           <FiPlus />
         </span>
       </button>
-      {open && <GroupChatCrate  open={open} setOpen={setOpen}/>}
-      {chaters ? (
+      {open && <GroupChatCreate  open={open} setOpen={setOpen}/>}
+      {chaters.length > 0 ? (
         <>
           <ul className="max-w-md divide-y divide-gray-300 dark:divide-gray-700">
             {chaters?.map((chater, key) => (
@@ -70,7 +70,7 @@ const ChatersList = () => {
           </ul>
         </>
       ) : (
-        <h4 className="text-red-500 text-xl">No chaters here</h4>
+        <p className="text-red-500 text-xl">No chats Selected</p>
       )}
     </div>
   );

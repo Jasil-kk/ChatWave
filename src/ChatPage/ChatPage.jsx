@@ -6,6 +6,7 @@ import axios from "axios";
 import Header from "./Header";
 import ChatersList from "./ChatersList";
 import { BaseUrl } from "../Store";
+import SelectChatter from "./SelectChatter";
 
 const ChatPage = () => {
   const [show, setShow] = useState(false);
@@ -56,8 +57,9 @@ const ChatPage = () => {
   console.log(profile);
 
   return (
-    <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins">
+    <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
       <Header profile={profile} />
+      <div className="absolute top-40 left-5"><SelectChatter/></div>
       <div className="mt-16 p-5 flex items-center gap-7">
         <ChatersList/>
       <div className="w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
