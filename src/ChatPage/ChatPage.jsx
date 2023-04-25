@@ -10,6 +10,7 @@ import SelectChatter from "./SelectChatter";
 
 const ChatPage = () => {
   const [show, setShow] = useState(false);
+  const [showUsers, setShowUsers] = useState(false);
   const [menuShow, setMenuShow] = useState(false);
   const [profile, setProfile] = useState();
   const [text, setText] = useState("");
@@ -59,7 +60,9 @@ const ChatPage = () => {
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
       <Header profile={profile} />
-      <div className="absolute top-40 left-5"><SelectChatter/></div>
+      <button onClick={setShowUsers} className="absolute top-20 left-10 w-auto px-3 h-10 bg-green-500 hover:bg-green-600 text-slate-50 rounded-md">Add New Chatter</button>
+      {showUsers &&
+      <div className="fixed top-0 left-0 z-50"><SelectChatter show={showUsers} setShow={setShowUsers}/></div>}
       <div className="mt-16 p-5 flex items-center gap-7">
         <ChatersList/>
       <div className="w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">

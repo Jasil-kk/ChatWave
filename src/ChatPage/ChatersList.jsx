@@ -20,10 +20,8 @@ const ChatersList = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      }); 
   }, []);
-
-console.log(chaters);
   const handleOpen = () => setOpen(true);
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
@@ -39,16 +37,15 @@ console.log(chaters);
           <ul className="max-w-md divide-y divide-gray-300 dark:divide-gray-700">
             {chaters?.map((chater, key) => (
                <React.Fragment key={key}>
-                {chater.users?.map((user, key) => (
-                  <li key={key} className="py-3 sm:py-4 hover:bg-slate-200">
+                  <li className="py-3 sm:py-4 hover:bg-slate-200">
                     <div className="flex items-center space-x-4">
                       <div className="flex-shrink-0">
                         <img
                           className="w-8 h-8 rounded-full"
                           src={
-                            user?.photos[0]
-                              ? user?.photos[0]?.url
-                              : user?.defaultPhoto?.url
+                            chater?.users[1]?.photos[0]
+                           ? chater?.users[1]?.photos[0]?.url
+                              : chater?.users[1]?.defaultPhoto?.url
                           }
                           alt="chater"
                         />
@@ -56,7 +53,7 @@ console.log(chaters);
 
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 truncate capitalize dark:text-white">
-                          {user.name}
+                          { chater?.users[1]?.name}
                         </p>
                         <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                           email@flowbite.com
@@ -64,7 +61,6 @@ console.log(chaters);
                       </div>
                     </div>
                   </li>
-                ))}
                 </React.Fragment>
             ))}
           </ul>
