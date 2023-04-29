@@ -3,9 +3,8 @@ import React, { useEffect, useState } from "react";
 import { BaseUrl } from "../Store";
 import { MdOutlineAdd } from "react-icons/md";
 
-const SelectChatter = ({ show, setShow }) => {
+const SelectChatter = ({setShowUsers}) => {
   const [users, setUsers] = useState();
-  const [userId, setUserId] = useState();
   const token = localStorage.getItem("token");
 
   const config = {
@@ -23,7 +22,8 @@ const SelectChatter = ({ show, setShow }) => {
       });
   }, []);
 
-  const handleAdd = async () => {
+
+  const handleAdd = async (userId) => {
     try {
       await axios.post(`${BaseUrl}/chat/user`, { userid: userId }, config);
     } catch (error) {
@@ -33,10 +33,9 @@ const SelectChatter = ({ show, setShow }) => {
 
   const userList = users?.result;
   console.log(userList);
-
   return (
     <>
-      <div className="w-72 h-screen overflow-y-scroll overflow-x-hidden p-3 bg-slate-700 font-outfit">
+      <div className="w-72 h-screen overflow-y-auto overflow-x-hidden p-3 bg-slate-700 font-outfit">
         <h1 className="text-3xl text-center my-5 text-slate-50 font-semibold">Users</h1>
         {userList ? (
           <>
@@ -60,8 +59,8 @@ const SelectChatter = ({ show, setShow }) => {
                   </p>
                   <span
                     onClick={() => {
-                      setUserId(user?._id);
-                      handleAdd();
+                      handleAdd(user?._id);
+                       setShowUsers(false);
                     }}
                     className="ml-auto p-0.5 bg-slate-500 text-slate-50 rounded-full cursor-pointer"
                   >
@@ -75,7 +74,7 @@ const SelectChatter = ({ show, setShow }) => {
           <p className="text-xl text-red-500">No users Found </p>
         )}
       </div>
-      <div className="w-full h-screen bg-slate-400 fixed z-30 left-72 inset-0 opacity-30"></div>
+      <div onClick={()=> setShowUsers(false)} className="w-full h-screen bg-slate-400 fixed z-30 left-72 inset-0 opacity-30"></div>
     </>
   );
 };
