@@ -15,6 +15,7 @@ const ChatPage = () => {
   const [profile, setProfile] = useState();
   const [text, setText] = useState("");
   const [textShow, setTextShow] = useState("");
+  const [chaters, setChaters] = useState([]);
   const ref = useRef(null);
 
   const token = localStorage.getItem("token");
@@ -59,14 +60,25 @@ const ChatPage = () => {
 
   const handlepen = () => setShowUsers(true);
 
+  useEffect(() => {
+    axios
+      .get(`${BaseUrl}/chat/get`, config)
+      .then((response) => {
+        setChaters(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
       <Header profile={profile} />
       <button onClick={handlepen} className="absolute top-20 left-10 w-auto px-3 h-10 bg-green-500 hover:bg-green-600 text-slate-50 rounded-md">Add New Chatter</button>
       {showUsers &&
-      <div className="fixed top-0 left-0 z-50"><SelectChatter setShowUsers={setShowUsers}/></div>}
+      <div className="fixed top-0 left-0 z-50"><SelectChatter setShowUsers={setShowUsers} chaters={chaters} setChaters={setChaters}/></div>}
       <div className="mt-16 p-5 flex items-center gap-7">
-        <ChatersList/>
+        <ChatersList chaters={chaters} setChaters={setChaters}/>
       <div className="w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
         <div className="w-full h-20 bg-green-700 flex items-center px-5">
           <div

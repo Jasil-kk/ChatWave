@@ -4,9 +4,8 @@ import { FiPlus } from "react-icons/fi";
 import { BaseUrl } from "../Store";
 import GroupChatCreate from "../Components/GroupChatCreate";
 
-const ChatersList = () => {
+const ChatersList = ({ chaters, setChaters }) => {
   const [open, setOpen] = useState(false);
-  const [chaters, setChaters] = useState([]);
   const token = localStorage.getItem("token");
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -22,7 +21,13 @@ const ChatersList = () => {
         console.log(error);
       }); 
   }, []);
+
   const handleOpen = () => setOpen(true);
+
+  const updateChaters = (newChaters) => {
+    setChaters(newChaters);
+  };
+
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
       <button onClick={handleOpen} className="ml-auto mb-5 w-auto h-10 px-5 bg-green-500 hover:bg-green-700 text-slate-50 rounded-lg flex items-center transform transition-all duration-1000 ease-in-out">
