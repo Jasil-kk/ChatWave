@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { BaseUrl } from "../Store";
 import { MdOutlineAdd } from "react-icons/md";
 
-const SelectChatter = ({ setShowUsers,chaters, setChaters  }) => {
+const SelectChatter = ({ setShowUsers, chaters, setChaters }) => {
   const [users, setUsers] = useState([]);
   const token = localStorage.getItem("token");
 
@@ -27,11 +27,14 @@ const SelectChatter = ({ setShowUsers,chaters, setChaters  }) => {
 
     fetchUsersAndChaters();
   }, []);
-  
+
   const handleAdd = async (userId) => {
     try {
       await axios.post(`${BaseUrl}/chat/user`, { userid: userId }, config);
-      const updatedChatersResponse = await axios.get(`${BaseUrl}/chat/get`, config);
+      const updatedChatersResponse = await axios.get(
+        `${BaseUrl}/chat/get`,
+        config
+      );
       setChaters(updatedChatersResponse.data);
     } catch (error) {
       console.log(error);
@@ -39,7 +42,6 @@ const SelectChatter = ({ setShowUsers,chaters, setChaters  }) => {
   };
 
   const userList = users?.result;
-  console.log(userList);
 
   const isUserInChatters = (userId) => {
     return chaters.some((chatter) =>
