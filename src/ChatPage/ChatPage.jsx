@@ -15,7 +15,6 @@ const ChatPage = () => {
   const [menuShow, setMenuShow] = useState(false);
   const [profile, setProfile] = useState();
   const [inputValue, setInputValue] = useState("");
-  const [textShow, setTextShow] = useState("");
   const [sended, setSended] = useState([]);
   const [chaters, setChaters] = useState([]);
   const [chaterId, setChaterId] = useState();
@@ -68,33 +67,6 @@ const ChatPage = () => {
     setInputValue(text);
   };
 
-  // const handleSend = async () => {
-  //   const chatid = chaterId?.id;
-  //   if (chatid) {
-  //     await axios
-  //       .post(
-  //         `${BaseUrl}/message/send`,
-  //         { content: inputValue, chatId: chatid },
-  //         config
-  //       )
-  //       .then((response) => {
-  //         console.log(response);
-  //       });
-  //   }
-  // };
-  // const chatid = chaterId?.id;
-  // useEffect(() => {
-  //   axios
-  //     .get(`${BaseUrl}/message/get/${chatid}`, config)
-  //     .then((response) => {
-  //       console.log(response.data);
-  //       setSended(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [chatid]);
-
   const handleSend = async () => {
     const chatid = chaterId?.id;
     if (chatid) {
@@ -105,24 +77,26 @@ const ChatPage = () => {
           config
         );
         console.log(response);
-        // Trigger the GET request here
         fetchMessages(chatid);
       } catch (error) {
         console.log(error);
       }
     }
   };
-  
+
   const fetchMessages = async (chatid) => {
     try {
-      const response = await axios.get(`${BaseUrl}/message/get/${chatid}`, config);
+      const response = await axios.get(
+        `${BaseUrl}/message/get/${chatid}`,
+        config
+      );
       console.log(response.data);
       setSended(response.data);
     } catch (error) {
       console.log(error);
     }
   };
-  
+
   const chatid = chaterId?.id;
   useEffect(() => {
     if (chatid) {
@@ -130,7 +104,6 @@ const ChatPage = () => {
       fetchMessages(chatid);
     }
   }, [chatid]);
-  
 
   console.log(inputValue);
   console.log(sended);
@@ -138,12 +111,14 @@ const ChatPage = () => {
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
       <Header profile={profile} />
+
       <button
         onClick={handlepen}
         className="absolute top-20 left-10 w-auto px-3 h-10 bg-green-500 hover:bg-green-600 text-slate-50 rounded-md"
       >
         Add New Chatter
       </button>
+
       {showUsers && (
         <div className="fixed top-0 left-0 z-50">
           <SelectChatter

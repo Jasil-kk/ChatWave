@@ -39,7 +39,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
           <FiPlus />
         </span>
       </button>
-      {open && <GroupChatCreate open={open} setOpen={setOpen} />}
+      {open && <GroupChatCreate open={open} setOpen={setOpen} chaters={chaters} setChaters={setChaters}/>}
       {chaters.length > 0 ? (
         <>
           <ul className="max-w-md divide-y divide-gray-300 dark:divide-gray-700">
