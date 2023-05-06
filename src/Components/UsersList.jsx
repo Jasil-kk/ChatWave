@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Checkbox from "@mui/material/Checkbox";
@@ -21,9 +21,26 @@ const style = {
 };
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-const UsersList = ({ show, setShow, userList }) => {
+const UsersList = ({ show, setShow, userList, onAddSelectedUsers }) => {
+  const [selectedUsers, setSelectedUsers] = useState([]);
   const handleClose = () => {
     setShow(false);
+  };
+  const handleUserSelect = (user) => {
+    const isSelected = selectedUsers.includes(user);
+    if (isSelected) {
+      setSelectedUsers(
+        selectedUsers.filter((selectedUser) => selectedUser !== user)
+      );
+    } else {
+      setSelectedUsers([...selectedUsers, user]);
+    }
+  };
+
+  const handleAddSelectedUsers = () => {
+    onAddSelectedUsers(selectedUsers);
+    setSelectedUsers([]);
+    handleClose();
   };
 
   return (
@@ -48,11 +65,20 @@ const UsersList = ({ show, setShow, userList }) => {
                       : user?.defaultPhoto?.url
                   }
                 />
-                {user?.name} <Checkbox {...label} sx={{ marginLeft: "auto" }} />
+                {user?.name}
+                <Checkbox
+                  {...label}
+                  checked={selectedUsers.includes(user)}
+                  onChange={() => handleUserSelect(user)}
+                  sx={{ marginLeft: "auto" }}
+                />
               </li>
             </ul>
           ))}
-          <button onClick={()=>{handleClose()}} className="mt-3 w-auto px-3 py-1 rounded-md bg-blue-500 text-slate-50 hover:bg-blue-600 transform transition-all duration-500 ease-in-out">
+          <button
+            onClick={handleAddSelectedUsers}
+            className="mt-3 w-auto px-3 py-1 rounded-md bg-blue-500 text-slate-50 hover:bg-blue-600 transform transition-all duration-500 ease-in-out"
+          >
             Add Selected Users
           </button>
         </Box>
