@@ -45,6 +45,12 @@ const GroupChatCreate = ({ open, setOpen }) => {
   const handleAddSelectedUsers = (users) => {
     setSelectedUsers(users);
   };
+  const handleRemoveUser = (index) => {
+    const updatedSelectedUsers = [...selectedUsers];
+    updatedSelectedUsers.splice(index, 1);
+    setSelectedUsers(updatedSelectedUsers);
+  };
+
   return (
     <div>
       <Modal
@@ -64,10 +70,10 @@ const GroupChatCreate = ({ open, setOpen }) => {
           />
 
           <div  className="w-full h-auto p-1 flex flex-wrap gap-2">
-            {map(selectedUsers, (users, key) => (
-              <div key={key} className="w-auto flex gap-2 items-center pl-3 pr-1 py-1 bg-slate-700 text-slate-50 rounded-sm">
+            {map(selectedUsers, (users, index) => (
+              <div key={index} className="w-auto flex gap-2 items-center pl-3 pr-1 py-1 bg-slate-700 text-slate-50 rounded-sm">
                 {users?.name}
-                <span className="ml-auto text-lg text-slate-50 cursor-pointer">
+                <span onClick={() => handleRemoveUser(index)} className="ml-auto text-lg text-slate-50 cursor-pointer">
                   <RxCrossCircled />
                 </span>
               </div>

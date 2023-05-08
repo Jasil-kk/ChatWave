@@ -49,11 +49,11 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                   onClick={() =>
                     setChaterId({
                       ...chaterId,
-                      id: chater?.users[1]?._id,
-                      name: chater?.users[1]?.name,
-                      photo: chater?.users[1]?.photos[0]
-                        ? chater?.users[1]?.photos[0]?.url
-                        : chater?.users[1]?.defaultPhoto?.url,
+                      id: chater?.users[0]?._id,
+                      name: chater?.users[0]?.name,
+                      photo: chater?.users[0]?.photos[0]
+                        ? chater?.users[0]?.photos[0]?.url
+                        : chater?.users[0]?.defaultPhoto?.url,
                     })
                   }
                   className="py-3 sm:py-4 hover:bg-slate-200"
@@ -63,9 +63,9 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                       <img
                         className="w-8 h-8 rounded-full"
                         src={
-                          chater?.users[1]?.photos[0]
-                            ? chater?.users[1]?.photos[0]?.url
-                            : chater?.users[1]?.defaultPhoto?.url
+                          chater?.users[0]?.photos[0]
+                            ? chater?.users[0]?.photos[0]?.url
+                            : chater?.users[0]?.defaultPhoto?.url
                         }
                         alt="chater"
                       />
@@ -73,7 +73,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
 
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate capitalize dark:text-white">
-                        {chater?.users[1]?.name}
+                        {chater?.users[0]?.name}
                       </p>
                       <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                         email@flowbite.com

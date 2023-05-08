@@ -6,6 +6,7 @@ import Profile from "../Components/Profile";
 import { BaseUrl } from "../Store";
 
 const Header = ({ profile }) => {
+  console.log(profile);
   const [open, setOpen] = useState(false);
   const [menuShow, setMenuShow] = useState(false);
   const ref = useRef(null);

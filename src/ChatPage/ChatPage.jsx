@@ -21,6 +21,7 @@ const ChatPage = () => {
   const ref = useRef(null);
 
   const token = localStorage.getItem("token");
+  
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -42,6 +43,7 @@ const ChatPage = () => {
   useEffect(() => {
     axios
       .get(`${BaseUrl}/user/get`, config)
+      
       .then((response) => {
         setProfile(response.data);
       })
@@ -57,6 +59,7 @@ const ChatPage = () => {
       .get(`${BaseUrl}/chat/get`, config)
       .then((response) => {
         setChaters(response.data);
+        
       })
       .catch((error) => {
         console.log(error);
@@ -193,23 +196,18 @@ const ChatPage = () => {
                 className="absolute top-16 left-28 w-96 h-auto p-5 flex items-center gap-5 bg-slate-50 rounded-xl"
               >
                 <div className="bg-slate-50 w-36 h-36 rounded-full border-4 border-slate-300 overflow-hidden">
-                  {profile?.photos[0] ? (
+            
                     <img
                       className="w-full h-full"
-                      src={profile?.photos[0]?.url}
+                      src={chaterId?.photo}
                       alt="profile"
                     />
-                  ) : (
-                    <img
-                      className="w-full h-full"
-                      src={profile?.defaultPhoto?.url}
-                      alt="profile"
-                    />
-                  )}
+
                 </div>
                 <div>
                   <h5 className="text-2xl text-slate-800 font-semibold ">
-                    {profile?.name}
+                  {chaterId?.name}
+                  
                   </h5>
                 </div>
               </div>
