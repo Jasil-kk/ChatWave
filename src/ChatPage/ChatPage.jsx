@@ -21,7 +21,6 @@ const ChatPage = () => {
   const ref = useRef(null);
 
   const token = localStorage.getItem("token");
-  
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -43,7 +42,7 @@ const ChatPage = () => {
   useEffect(() => {
     axios
       .get(`${BaseUrl}/user/get`, config)
-      
+
       .then((response) => {
         setProfile(response.data);
       })
@@ -59,7 +58,6 @@ const ChatPage = () => {
       .get(`${BaseUrl}/chat/get`, config)
       .then((response) => {
         setChaters(response.data);
-        
       })
       .catch((error) => {
         console.log(error);
@@ -71,8 +69,8 @@ const ChatPage = () => {
   };
 
   const handleSend = async () => {
-    const chatid = chaterId?.id;
-    if (chatid) {
+    const chatIds = chaters.map((chater) => chater._id);
+    chatIds.forEach(async (chatid) => {
       try {
         const response = await axios.post(
           `${BaseUrl}/message/send`,
@@ -84,32 +82,31 @@ const ChatPage = () => {
       } catch (error) {
         console.log(error);
       }
-    }
+    });
   };
 
-  const fetchMessages = async (chatid) => {
-    try {
-      const response = await axios.get(
-        `${BaseUrl}/message/get/${chatid}`,
-        config
-      );
-      console.log(response.data);
-      setSended(response.data);
-    } catch (error) {
-      console.log(error);
-    }
+  const fetchMessages = async () => {
+    const chatIds = chaters.map((chater) => chater._id);
+    chatIds.forEach(async (chatid) => {
+      try {
+        const response = await axios.get(
+          `${BaseUrl}/message/get/${chatid}`,
+          config
+        );
+        console.log(response.data);
+        setSended(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    });
   };
 
   const chatid = chaterId?.id;
   useEffect(() => {
     if (chatid) {
-      // Trigger the GET request initially
       fetchMessages(chatid);
     }
   }, [chatid]);
-
-  console.log(inputValue);
-  console.log(sended);
 
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
@@ -163,15 +160,27 @@ const ChatPage = () => {
             </div>
 
             <div className="w-full h-full p-4 flex flex-col font-outfit bg-slate-50 overflow-y-auto relative bg-cover bg-no-repeat bg-[url('https://i.pinimg.com/originals/39/cf/bc/39cfbc81276720ddf5003854e42c2769.jpg')]">
-              {map(sended, (send) => (
-                <div className="ml-auto mb-2 w-auto flex items-center px-3 py-1 text-lg h-auto bg-blue-100 rounded-2xl rounded-tr-none drop-shadow-lg text-slate-800">
-                  {send?.content}
-                </div>
+              {map(sended, (send, index) => (
+                <React.Fragment key={index}>
+                  {profile?._id === send?.sender?._id ? (
+                    <div
+                      key={index}
+                      className="ml-auto mb-2 w-auto flex items-center px-3 py-1 text-lg h-auto bg-blue-100 rounded-2xl rounded-tr-none drop-shadow-lg text-slate-800"
+                    >
+                      {send?.content}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  {chaterId?.id === send?.sender?._id ? (
+                    <div className="mr-auto w-auto flex items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
+                      {send?.content}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </React.Fragment>
               ))}
-
-              <div className="mr-auto w-auto flex items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
-                hello
-              </div>
             </div>
             <div className="w-full h-20 flex gap-2 items-center px-5 bg-slate-300">
               <InputEmoji
@@ -196,18 +205,15 @@ const ChatPage = () => {
                 className="absolute top-16 left-28 w-96 h-auto p-5 flex items-center gap-5 bg-slate-50 rounded-xl"
               >
                 <div className="bg-slate-50 w-36 h-36 rounded-full border-4 border-slate-300 overflow-hidden">
-            
-                    <img
-                      className="w-full h-full"
-                      src={chaterId?.photo}
-                      alt="profile"
-                    />
-
+                  <img
+                    className="w-full h-full"
+                    src={chaterId?.photo}
+                    alt="profile"
+                  />
                 </div>
                 <div>
                   <h5 className="text-2xl text-slate-800 font-semibold ">
-                  {chaterId?.name}
-                  
+                    {chaterId?.name}
                   </h5>
                 </div>
               </div>

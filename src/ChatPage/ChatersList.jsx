@@ -27,7 +27,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
   const updateChaters = (newChaters) => {
     setChaters(newChaters);
   };
-  console.log(chaters);
+  console.log("Chat :",chaters);
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
       <button

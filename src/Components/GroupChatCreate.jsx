@@ -20,7 +20,6 @@ const style = {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  gap: 2,
 };
 const GroupChatCreate = ({ open, setOpen }) => {
   const [show, setShow] = useState(false);
@@ -65,11 +64,11 @@ const GroupChatCreate = ({ open, setOpen }) => {
           </h2>
           <input
             type="text"
-            className="w-full h-12 border-2 border-slate-200 rounded-lg pl-3 text-slate-800 outline-green-500"
+            className="mt-4 w-full h-12 border-2 border-slate-200 rounded-lg pl-3 text-slate-800 outline-green-500"
             placeholder="Chat Name"
           />
 
-          <div  className="w-full h-auto p-1 flex flex-wrap gap-2">
+          <div  className="mt-2 mb-1 w-full h-auto p-1 flex flex-wrap gap-2">
             {map(selectedUsers, (users, index) => (
               <div key={index} className="w-auto flex gap-2 items-center pl-3 pr-1 py-1 bg-slate-700 text-slate-50 rounded-sm">
                 {users?.name}
@@ -84,7 +83,7 @@ const GroupChatCreate = ({ open, setOpen }) => {
               handleOpen();
               handleUsers();
             }}
-            className="mr-auto w-auto px-3 h-10 bg-blue-500 rounded-lg text-slate-50 hover:bg-blue-600 transform transition-all duration-500 ease-in-out"
+            className="mr-auto mt-1 w-auto px-3 h-10 bg-blue-500 rounded-lg text-slate-50 hover:bg-blue-600 transform transition-all duration-500 ease-in-out"
           >
             Select Users
           </button>
