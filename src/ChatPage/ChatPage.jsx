@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { CiMenuKebab } from "react-icons/ci";
 import { MdSend } from "react-icons/md";
 import InputEmoji from "react-input-emoji";
@@ -8,6 +8,11 @@ import ChatersList from "./ChatersList";
 import { BaseUrl } from "../Store";
 import SelectChatter from "./SelectChatter";
 import { map } from "lodash";
+import { Socket } from "socket.io-client";
+import { io } from "socket.io-client";
+
+const ENDPOINT = "http://localhost:4001"; 
+var socket, selectedChatCompare;
 
 const ChatPage = () => {
   const [show, setShow] = useState(false);
@@ -15,26 +20,15 @@ const ChatPage = () => {
   const [menuShow, setMenuShow] = useState(false);
   const [profile, setProfile] = useState();
   const [inputValue, setInputValue] = useState("");
-  const [sended, setSended] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [chaters, setChaters] = useState([]);
   const [chaterId, setChaterId] = useState();
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [typing, setTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const ref = useRef(null);
 
   const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleClickOutside = (event) => {
-    if (ref.current && !ref.current.contains(event.target)) {
-      setShow(false);
-      setMenuShow(false);
-    }
-  };
 
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -50,6 +44,29 @@ const ChatPage = () => {
         console.log(error);
       });
   }, []);
+  
+  useEffect(()=>{
+    socket = io(ENDPOINT);
+     socket.emit("setup", profile);
+    console.log(profile);
+    socket.on("connection", () => setSocketConnected(true));
+  },[profile])
+
+  console.log(profile);
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  },[]);
+
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setShow(false);
+      setMenuShow(false);
+    }
+  };
+
 
   const handlepen = () => setShowUsers(true);
 
@@ -68,22 +85,27 @@ const ChatPage = () => {
     setInputValue(text);
   };
 
+
   const handleSend = async () => {
     const chatIds = chaters.map((chater) => chater._id);
     chatIds.forEach(async (chatid) => {
       try {
-        const response = await axios.post(
+        const { data } = await axios.post(
           `${BaseUrl}/message/send`,
           { content: inputValue, chatId: chatid },
           config
         );
-        console.log(response);
+        // console.log(response);
+        socket.emit("new message", data)
+        setMessages([...messages, data])
         fetchMessages(chatid);
       } catch (error) {
         console.log(error);
       }
     });
   };
+
+
 
   const fetchMessages = async () => {
     const chatIds = chaters.map((chater) => chater._id);
@@ -94,19 +116,34 @@ const ChatPage = () => {
           config
         );
         console.log(response.data);
-        setSended(response.data);
+        setMessages(response.data);
+        socket.emit("join chat",chatid )
       } catch (error) {
         console.log(error);
       }
     });
   };
 
-  const chatid = chaterId?.id;
-  useEffect(() => {
-    if (chatid) {
-      fetchMessages(chatid);
+
+
+
+  useEffect(()=>{
+    fetchMessages();
+    selectedChatCompare = chaterId;
+  },[chaterId])
+
+  useEffect(()=>{
+    socket.on("message recieved",(newMessageRecieved)=> {
+      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chatid){
+        // notification
+      }
+      else{
+        setMessages([...messages,newMessageRecieved]);
+      }
     }
-  }, [chatid]);
+    )
+  })
+
 
   return (
     <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
@@ -160,21 +197,21 @@ const ChatPage = () => {
             </div>
 
             <div className="w-full h-full p-4 flex flex-col font-outfit bg-slate-50 overflow-y-auto relative bg-cover bg-no-repeat bg-[url('https://i.pinimg.com/originals/39/cf/bc/39cfbc81276720ddf5003854e42c2769.jpg')]">
-              {map(sended, (send, index) => (
+              {map(messages, (message, index) => (
                 <React.Fragment key={index}>
-                  {profile?._id === send?.sender?._id ? (
+                  {profile?._id === message?.sender?._id ? (
                     <div
                       key={index}
-                      className="ml-auto mb-2 w-auto flex items-center px-3 py-1 text-lg h-auto bg-blue-100 rounded-2xl rounded-tr-none drop-shadow-lg text-slate-800"
+                      className="ml-auto mb-1 w-auto flex items-center px-3 py-1 text-lg h-auto bg-blue-100 rounded-2xl rounded-tr-none drop-shadow-lg text-slate-800"
                     >
-                      {send?.content}
+                      {message?.content}
                     </div>
                   ) : (
                     ""
                   )}
-                  {chaterId?.id === send?.sender?._id ? (
-                    <div className="mr-auto w-auto flex items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
-                      {send?.content}
+                  {chaterId?.id === message?.sender?._id ? (
+                    <div className="mr-auto mb-1 w-auto flex items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
+                      {message?.content}
                     </div>
                   ) : (
                     ""
