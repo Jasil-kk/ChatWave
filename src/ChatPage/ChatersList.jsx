@@ -49,6 +49,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                   onClick={() =>
                     setChaterId({
                       ...chaterId,
+                      chatID: chater?._id,
                       id: chater?.users[0]?._id,
                       name: chater?.users[0]?.name,
                       photo: chater?.users[0]?.photos[0]
@@ -72,7 +73,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900 truncate capitalize dark:text-white">
+                      <p className="text-sm font-medium text-gray-900 truncate capitalize dark:text-gray  -900">
                         {chater?.users[0]?.name}
                       </p>
                       <p className="text-sm text-gray-500 truncate dark:text-gray-400">

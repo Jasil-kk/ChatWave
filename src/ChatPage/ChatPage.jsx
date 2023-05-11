@@ -8,10 +8,9 @@ import ChatersList from "./ChatersList";
 import { BaseUrl } from "../Store";
 import SelectChatter from "./SelectChatter";
 import { map } from "lodash";
-import { Socket } from "socket.io-client";
 import { io } from "socket.io-client";
 
-const ENDPOINT = "http://localhost:4001"; 
+const ENDPOINT = "http://localhost:4001";
 var socket, selectedChatCompare;
 
 const ChatPage = () => {
@@ -21,11 +20,10 @@ const ChatPage = () => {
   const [profile, setProfile] = useState();
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
   const [chaters, setChaters] = useState([]);
   const [chaterId, setChaterId] = useState();
   const [socketConnected, setSocketConnected] = useState(false);
-  const [typing, setTyping] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
   const ref = useRef(null);
 
   const token = localStorage.getItem("token");
@@ -44,13 +42,12 @@ const ChatPage = () => {
         console.log(error);
       });
   }, []);
-  
-  useEffect(()=>{
+
+  useEffect(() => {
     socket = io(ENDPOINT);
-     socket.emit("setup", profile);
-    console.log(profile);
-    socket.on("connection", () => setSocketConnected(true));
-  },[profile])
+    socket.emit("setup", profile);
+    socket.on("connected", () => setSocketConnected(true));
+  }, [profile]);
 
   console.log(profile);
   useEffect(() => {
@@ -58,7 +55,7 @@ const ChatPage = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  },[]);
+  }, []);
 
   const handleClickOutside = (event) => {
     if (ref.current && !ref.current.contains(event.target)) {
@@ -66,7 +63,6 @@ const ChatPage = () => {
       setMenuShow(false);
     }
   };
-
 
   const handlepen = () => setShowUsers(true);
 
@@ -85,68 +81,56 @@ const ChatPage = () => {
     setInputValue(text);
   };
 
-
   const handleSend = async () => {
-    const chatIds = chaters.map((chater) => chater._id);
-    chatIds.forEach(async (chatid) => {
-      try {
-        const { data } = await axios.post(
-          `${BaseUrl}/message/send`,
-          { content: inputValue, chatId: chatid },
-          config
-        );
-        // console.log(response);
-        socket.emit("new message", data)
-        setMessages([...messages, data])
-        fetchMessages(chatid);
-      } catch (error) {
-        console.log(error);
-      }
-    });
+    try {
+      const { data } = await axios.post(
+        `${BaseUrl}/message/send`,
+        { content: inputValue, chatId: chaterId?.chatID },
+        config
+      );
+      // console.log(response);
+      socket.emit("new message", data);
+      setMessages([...messages, data]);
+      fetchMessages(chaterId?.chatID);
+    } catch (error) {
+      console.log(error);
+    }
   };
-
-
 
   const fetchMessages = async () => {
-    const chatIds = chaters.map((chater) => chater._id);
-    chatIds.forEach(async (chatid) => {
-      try {
-        const response = await axios.get(
-          `${BaseUrl}/message/get/${chatid}`,
-          config
-        );
-        console.log(response.data);
-        setMessages(response.data);
-        socket.emit("join chat",chatid )
-      } catch (error) {
-        console.log(error);
-      }
-    });
+    try {
+      const response = await axios.get(
+        `${BaseUrl}/message/get/${chaterId?.chatID}`,
+        config
+      );
+      console.log(response.data);
+      setMessages(response.data);
+      socket.emit("join chat", chaterId?.chatID);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-
-
-
-  useEffect(()=>{
+  useEffect(() => {
     fetchMessages();
     selectedChatCompare = chaterId;
-  },[chaterId])
+  }, [chaterId]);
 
-  useEffect(()=>{
-    socket.on("message recieved",(newMessageRecieved)=> {
-      if(!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chatid){
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageRecieved.chatid
+      ) {
         // notification
+      } else {
+        setMessages([...messages, newMessageRecieved]);
       }
-      else{
-        setMessages([...messages,newMessageRecieved]);
-      }
-    }
-    )
-  })
-
+    });
+  });
 
   return (
-    <div className="w-full h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
+    <div className="w-full min-h-screen h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
       <Header profile={profile} />
 
       <button
