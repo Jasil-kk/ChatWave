@@ -25,6 +25,8 @@ const GroupChatCreate = ({ open, setOpen }) => {
   const [show, setShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [groupName,setGroupName] = useState("");
+  const [usersIds,setUsersIds] =useState([]);
   const handleClose = () => setOpen(false);
 
   const token = localStorage.getItem("token");
@@ -50,6 +52,13 @@ const GroupChatCreate = ({ open, setOpen }) => {
     setSelectedUsers(updatedSelectedUsers);
   };
 
+const handleCreateGroup = () => {
+  const userIds = selectedUsers.map(user => user._id);
+console.log(userIds);
+  axios.post(`${BaseUrl}/chat/group/create`,{users:userIds,name:groupName},config).then((response) => {
+    console.log(response.data);
+  });
+}  
   return (
     <div>
       <Modal
@@ -66,6 +75,7 @@ const GroupChatCreate = ({ open, setOpen }) => {
             type="text"
             className="mt-4 w-full h-12 border-2 border-slate-200 rounded-lg pl-3 text-slate-800 outline-green-500"
             placeholder="Chat Name"
+            onChange={(e)=> setGroupName(e.target.value)}
           />
 
           <div  className="mt-2 mb-1 w-full h-auto p-1 flex flex-wrap gap-2">
@@ -93,7 +103,7 @@ const GroupChatCreate = ({ open, setOpen }) => {
             userList={userList}
             onAddSelectedUsers={handleAddSelectedUsers}
           />
-          <button className="ml-auto w-auto px-3 h-10 bg-green-500 hover:bg-green-600 text-slate-50 rounded-md">
+          <button onClick={handleCreateGroup} className="ml-auto w-auto px-3 h-10 bg-green-500 hover:bg-green-600 text-slate-50 rounded-md">
             Create Chat
           </button>
         </Box>

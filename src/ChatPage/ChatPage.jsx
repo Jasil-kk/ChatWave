@@ -9,6 +9,7 @@ import { BaseUrl } from "../Store";
 import SelectChatter from "./SelectChatter";
 import { map } from "lodash";
 import { io } from "socket.io-client";
+import Notification from "../Components/Notification";
 
 const ENDPOINT = "http://localhost:4001";
 var socket, selectedChatCompare;
@@ -24,6 +25,8 @@ const ChatPage = () => {
   const [chaters, setChaters] = useState([]);
   const [chaterId, setChaterId] = useState();
   const [socketConnected, setSocketConnected] = useState(false);
+  const [notification, setNotification] = useState([]);
+  const [fetchAgain, setFetchAgain] = useState(false);
   const ref = useRef(null);
 
   const token = localStorage.getItem("token");
@@ -49,7 +52,6 @@ const ChatPage = () => {
     socket.on("connected", () => setSocketConnected(true));
   }, [profile]);
 
-  console.log(profile);
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
@@ -103,7 +105,6 @@ const ChatPage = () => {
         `${BaseUrl}/message/get/${chaterId?.chatID}`,
         config
       );
-      console.log(response.data);
       setMessages(response.data);
       socket.emit("join chat", chaterId?.chatID);
     } catch (error) {
@@ -120,9 +121,12 @@ const ChatPage = () => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (
         !selectedChatCompare ||
-        selectedChatCompare._id !== newMessageRecieved.chatid
+        selectedChatCompare.chatID !== newMessageRecieved.chaterId.chatID
       ) {
-        // notification
+        if(!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
       }
@@ -156,7 +160,11 @@ const ChatPage = () => {
           chaterId={chaterId}
           setChaterId={setChaterId}
         />
-        {chaterId && (
+        <div className="flex flex-col">
+          {chaterId ? null :
+          <Notification notification={notification} chaterId={chaterId}/>}
+            
+        {chaterId ? (
           <div className="w-[600px] h-[700px] drop-shadow-lg flex flex-col bg-slate-200 rounded-xl overflow-hidden relative">
             <div className="w-full h-20 bg-green-700 flex items-center px-5">
               <div
@@ -246,7 +254,12 @@ const ChatPage = () => {
               ></div>
             )}
           </div>
+        ): (
+          <div className="bg-green-200 p-16 text-slate-800">
+            click on a user to start chatting
+          </div>
         )}
+        </div>
       </div>
     </div>
   );

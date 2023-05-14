@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BaseUrl } from "../Store";
 import GroupChatCreate from "../Components/GroupChatCreate";
+import group from "../assets/group.svg"
 
 const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
   const [open, setOpen] = useState(false);
@@ -27,7 +28,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
   const updateChaters = (newChaters) => {
     setChaters(newChaters);
   };
-  console.log("Chat :",chaters);
+  console.log("chats:",chaters);
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
       <button
@@ -64,9 +65,11 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                       <img
                         className="w-8 h-8 rounded-full"
                         src={
+                          chater?.chatName === "sender" ?
                           chater?.users[0]?.photos[0]
                             ? chater?.users[0]?.photos[0]?.url
-                            : chater?.users[0]?.defaultPhoto?.url
+                            : chater?.users[0]?.defaultPhoto?.url :
+                            group
                         }
                         alt="chater"
                       />
@@ -74,7 +77,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
 
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate capitalize dark:text-gray  -900">
-                        {chater?.users[0]?.name}
+                        {chater?.chatName === "sender" ? chater?.users[0]?.name : chater?.chatName}
                       </p>
                       <p className="text-sm text-gray-500 truncate dark:text-gray-400">
                         email@flowbite.com
@@ -87,7 +90,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
           </ul>
         </>
       ) : (
-        <p className="text-red-500 text-xl">No chats Selected</p>
+        <p className="text-red-500 text-xl">No users Selected</p>
       )}
     </div>
   );
