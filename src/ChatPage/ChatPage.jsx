@@ -235,7 +235,7 @@ const ChatPage = () => {
                   ref={ref}
                   className="absolute top-16 left-28 w-96 h-auto p-5 flex flex-col gap-5 bg-slate-50 rounded-xl"
                 >
-                  <ChatProfile profile={profile} chaterId={chaterId} confige={config} />
+                  <ChatProfile profile={profile} chaterId={chaterId} setChaterId={setChaterId} config={config} />
                 </div>
               )}
               {menuShow && (

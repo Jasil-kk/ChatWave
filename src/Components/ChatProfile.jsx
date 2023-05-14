@@ -3,11 +3,16 @@ import React, { useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { BaseUrl } from "../Store";
 
-const ChatProfile = ({ profile, chaterId }) => {
+const ChatProfile = ({ profile, chaterId,setChaterId,config }) => {
   const [show, setShow] = useState(false);
+  const handleShow = () => setShow(!show);
+  const handleClose = () => setShow(!show);
+  const [groupName, setGroupName] = useState("");
   const handleEdit = () => {
-    axios.put(`${BaseUrl}/chat/group/rename`, config).then((response) => {
+    axios.put(`${BaseUrl}/chat/group/rename`,{chatId:chaterId?.chatID,chatName:groupName},config).then((response) => {
       console.log(response.data);
+      setChaterId({...chaterId,name : response.data.chatName});
+      handleClose();
     });
   };
   return (
@@ -21,7 +26,7 @@ const ChatProfile = ({ profile, chaterId }) => {
             {chaterId?.name}
           </h5>
         </div>
-        <span className="text-xl mt-1 text-slate-500 cursor-pointer">
+        <span onClick={handleShow} className="text-xl mt-1 text-slate-500 cursor-pointer">
           <MdEdit />
         </span>
       </div>
@@ -29,11 +34,12 @@ const ChatProfile = ({ profile, chaterId }) => {
         <div className="w-full flex flex-col gap-3 h-auto p-3 pr-5">
           <h3 className="text-slate-800 ">Change Group Name</h3>
           <input
-            className="h-10 px-3"
+            className="h-10 px-3 border border-slate-300"
             type="text"
             defaultValue={chaterId?.name}
+            onChange={(e)=> setGroupName(e.target.value)}
           />
-          <button className="ml-auto rounded bg-green-500 w-auto h-8 px-2 text-slate-50">
+          <button onClick={handleEdit} className="ml-auto rounded bg-green-500 w-auto h-8 px-2 text-slate-50">
             change
           </button>
         </div>
