@@ -21,12 +21,11 @@ const style = {
   flexDirection: "column",
   alignItems: "center",
 };
-const GroupChatCreate = ({ open, setOpen }) => {
+const GroupChatCreate = ({ open, setOpen,chaters, setChaters }) => {
   const [show, setShow] = useState(false);
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [groupName,setGroupName] = useState("");
-  const [usersIds,setUsersIds] =useState([]);
   const handleClose = () => setOpen(false);
 
   const token = localStorage.getItem("token");
@@ -54,9 +53,9 @@ const GroupChatCreate = ({ open, setOpen }) => {
 
 const handleCreateGroup = () => {
   const userIds = selectedUsers.map(user => user._id);
-console.log(userIds);
   axios.post(`${BaseUrl}/chat/group/create`,{users:userIds,name:groupName},config).then((response) => {
-    console.log(response.data);
+    setChaters([...chaters,response.data]);
+   handleClose();
   });
 }  
   return (

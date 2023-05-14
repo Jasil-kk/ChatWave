@@ -41,13 +41,27 @@ const SelectChatter = ({ setShowUsers, chaters, setChaters }) => {
     }
   };
 
-  const userList = users?.result;
+  const userList = users?.result || [];
+
+  // const isUserInChatters = (userId) => {
+  //   return chaters.some((chatter) =>
+  //     chatter.users.some((user) => user._id === userId)
+  //   );
+  // };
 
   const isUserInChatters = (userId) => {
     return chaters.some((chatter) =>
       chatter.users.some((user) => user._id === userId)
     );
   };
+
+  const filteredUserList = userList.filter((user) => {
+    const isUserInSenderChat = chaters.some(
+      (chatter) => chatter.isGroupChat === true && chatter.users.includes(user._id)
+    );
+    return !isUserInSenderChat;
+  });
+
 
   return (
     <>
@@ -57,10 +71,10 @@ const SelectChatter = ({ setShowUsers, chaters, setChaters }) => {
         </h1>
         {userList ? (
           <>
-            {userList?.map((user, key) => {
-              if (isUserInChatters(user._id)) {
-                return null;
-              }
+            {filteredUserList?.map((user, key) => {
+              // if (isUserInChatters(user._id)) {
+              //   return null;
+              // }
               return (
                 <ul
                   key={key}

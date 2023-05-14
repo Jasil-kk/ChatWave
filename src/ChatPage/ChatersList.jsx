@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { BaseUrl } from "../Store";
 import GroupChatCreate from "../Components/GroupChatCreate";
-import group from "../assets/group.svg"
+import group from "../assets/group.svg";
 
 const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
   const [open, setOpen] = useState(false);
@@ -28,7 +28,7 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
   const updateChaters = (newChaters) => {
     setChaters(newChaters);
   };
-  console.log("chats:",chaters);
+  console.log("chats:", chaters);
   return (
     <div className="w-[450px] p-4 border border-slate-400 bg-slate-100 rounded-xl drop-shadow-lg">
       <button
@@ -40,7 +40,14 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
           <FiPlus />
         </span>
       </button>
-      {open && <GroupChatCreate open={open} setOpen={setOpen} chaters={chaters} setChaters={setChaters}/>}
+      {open && (
+        <GroupChatCreate
+          open={open}
+          setOpen={setOpen}
+          chaters={chaters}
+          setChaters={setChaters}
+        />
+      )}
       {chaters.length > 0 ? (
         <>
           <ul className="max-w-md divide-y divide-gray-300 dark:divide-gray-700">
@@ -48,15 +55,24 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
               <React.Fragment key={key}>
                 <li
                   onClick={() =>
-                    setChaterId({
-                      ...chaterId,
-                      chatID: chater?._id,
-                      id: chater?.users[0]?._id,
-                      name: chater?.users[0]?.name,
-                      photo: chater?.users[0]?.photos[0]
-                        ? chater?.users[0]?.photos[0]?.url
-                        : chater?.users[0]?.defaultPhoto?.url,
-                    })
+                    chater?.isGroupChat === false
+                      ? setChaterId({
+                          ...chaterId,
+                          chatID: chater?._id,
+                          id: chater?.users[0]?._id,
+                          name: chater?.users[0]?.name,
+                          photo: chater?.users[0]?.photos[0]
+                            ? chater?.users[0]?.photos[0]?.url
+                            : chater?.users[0]?.defaultPhoto?.url,
+                        })
+                      : setChaterId({
+                          ...chaterId,
+                          chatID: chater?._id,
+                          name: chater?.chatName,
+                          photo: group,
+                          groupAdmin:chater?.groupAdmin,
+                          members: chater?.users
+                        })
                   }
                   className="py-3 sm:py-4 hover:bg-slate-200"
                 >
@@ -65,11 +81,11 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                       <img
                         className="w-8 h-8 rounded-full"
                         src={
-                          chater?.chatName === "sender" ?
-                          chater?.users[0]?.photos[0]
-                            ? chater?.users[0]?.photos[0]?.url
-                            : chater?.users[0]?.defaultPhoto?.url :
-                            group
+                          chater?.isGroupChat === false
+                            ? chater?.users[0]?.photos[0]
+                              ? chater?.users[0]?.photos[0]?.url
+                              : chater?.users[0]?.defaultPhoto?.url
+                            : group
                         }
                         alt="chater"
                       />
@@ -77,10 +93,14 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
 
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium text-gray-900 truncate capitalize dark:text-gray  -900">
-                        {chater?.chatName === "sender" ? chater?.users[0]?.name : chater?.chatName}
+                        {chater?.chatName === "sender"
+                          ? chater?.users[0]?.name
+                          : chater?.chatName}
                       </p>
                       <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-                        email@flowbite.com
+                        {chater?.isGroupChat === false
+                          ? chater?.latestMessage?.content
+                          : `${chater?.latestMessage?.sender?.name}: ${chater?.latestMessage?.content}`}
                       </p>
                     </div>
                   </div>
