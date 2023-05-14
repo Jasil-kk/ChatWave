@@ -64,14 +64,17 @@ const ChatersList = ({ chaters, setChaters, chaterId, setChaterId }) => {
                           photo: chater?.users[0]?.photos[0]
                             ? chater?.users[0]?.photos[0]?.url
                             : chater?.users[0]?.defaultPhoto?.url,
+                            isGroupChat : chater?.isGroupChat
                         })
                       : setChaterId({
                           ...chaterId,
                           chatID: chater?._id,
+                          id: chater?.users[0]?._id,
                           name: chater?.chatName,
                           photo: group,
                           groupAdmin:chater?.groupAdmin,
-                          members: chater?.users
+                          members: chater?.users,
+                          isGroupChat : chater?.isGroupChat
                         })
                   }
                   className="py-3 sm:py-4 hover:bg-slate-200"
