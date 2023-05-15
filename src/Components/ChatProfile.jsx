@@ -93,7 +93,16 @@ const ChatProfile = ({ profile, chaterId, setChaterId, config }) => {
             >
               <MdOutlinePersonAddAlt />
             </div>
-            <AddUsers show={open} setShow={setOpen} users={users} />
+            {open && (
+              <AddUsers
+                show={open}
+                setShow={setOpen}
+                users={users}
+                config={config}
+                chaterId={chaterId}
+                setChaterId={setChaterId} 
+              />
+            )}
             <span className="ml-2 mb-2 pr-5 flex items-center text-lg text-slate-800 capitalize">
               <img
                 className="w-8 h-8 rounded-full mr-3"
@@ -112,27 +121,32 @@ const ChatProfile = ({ profile, chaterId, setChaterId, config }) => {
               </p>
             </span>
             {Array.isArray(chaterId.members) &&
-              chaterId.members.map((member, index) => (
-                <span
-                  key={index}
-                  className="ml-2 mb-2 pr-5 flex items-center text-lg text-slate-800 capitalize"
-                >
-                  <img
-                    className="w-8 h-8 rounded-full mr-3"
-                    src={
-                      member?.photos[0]
-                        ? member?.photos[0]?.url
-                        : member?.defaultPhoto?.url
-                    }
-                    alt="pic"
-                  />
-                  {member?.name}
-                  <RxCrossCircled
-                    onClick={() => handleRemoveUser(member?.id)}
-                    className="ml-auto text-xl"
-                  />
-                </span>
-              ))}
+                chaterId.members.map((member, index) => (
+                  <React.Fragment  key={index}>
+                    {chaterId?.groupAdmin?.name !== member?.name ? (
+                    
+                      <span
+                       
+                        className="ml-2 mb-2 pr-5 flex items-center text-lg text-slate-800 capitalize"
+                      >
+                        <img
+                          className="w-8 h-8 rounded-full mr-3"
+                          src={
+                            member?.photos[0]
+                              ? member?.photos[0]?.url
+                              : member?.defaultPhoto?.url
+                          }
+                          alt="pic"
+                        />
+                        {member?.name}
+                        <RxCrossCircled
+                          onClick={() => handleRemoveUser(member?.id)}
+                          className="ml-auto text-xl"
+                        />
+                      </span>
+                    ):""}
+                  </React.Fragment>
+                ))}
           </div>
         </>
       )}
