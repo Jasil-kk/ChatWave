@@ -133,7 +133,7 @@ const ChatPage = () => {
       }
     });
   });
-
+  console.log(messages);
   return (
     <div className="w-full min-h-screen h-auto bg-slate-50 flex flex-col items-center font-poppins relative">
       <Header profile={profile} />
@@ -203,12 +203,29 @@ const ChatPage = () => {
                     ) : (
                       ""
                     )}
-                    {chaterId?.id === message?.sender?._id ? (
-                      <div className="mr-auto mb-1 w-auto flex items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
-                        {message?.content}
-                      </div>
+                    {message?.chat?.isGroupChat === "false" ? (
+                      <>
+                        {chaterId?.id === message?.sender?._id ? (
+                          <div className="mr-auto mb-1 w-auto flex items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
+                            {message?.content}
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </>
                     ) : (
-                      ""
+                      <>
+                        {profile?._id === message?.sender?._id ? (
+                          ""
+                        ) : (
+                          <div className="mr-auto mb-1 w-auto flex flex-col items-center px-3 py-1 text-lg h-auto bg-green-100 rounded-2xl rounded-tl-none drop-shadow-lg text-slate-800">
+                            <h6 className="text-sm text-blue-600 mr-auto">
+                              {message?.sender?.name}
+                            </h6>
+                            <p>{message?.content}</p>
+                          </div>
+                        )}
+                      </>
                     )}
                   </React.Fragment>
                 ))}
@@ -235,7 +252,12 @@ const ChatPage = () => {
                   ref={ref}
                   className="absolute top-16 left-28 w-96 h-auto p-5 flex flex-col gap-5 bg-slate-50 rounded-xl"
                 >
-                  <ChatProfile profile={profile} chaterId={chaterId} setChaterId={setChaterId} config={config} />
+                  <ChatProfile
+                    profile={profile}
+                    chaterId={chaterId}
+                    setChaterId={setChaterId}
+                    config={config}
+                  />
                 </div>
               )}
               {menuShow && (
