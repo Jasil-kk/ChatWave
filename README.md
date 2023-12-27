@@ -26,5 +26,5 @@ ChatWave is a chat application developed in React using Socket.io for real-time 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/chatwave.git
-cd chatwave
+git clone https://github.com/Jasil-kk/ChatWave.git
+cd ChatWave
